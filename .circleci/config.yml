@@ -173,7 +173,6 @@ jobs:
           name: Check inventory.txt file
           command: |
             cat ~/project/.circleci/ansible/inventory.txt
-
       - persist_to_workspace:
           root: ~/
           paths:
@@ -182,24 +181,33 @@ jobs:
       - destroy-environment:
           workflow_id: '${CIRCLE_WORKFLOW_ID:0:7}'
 
-#   configure-infrastructure:
-#     docker:
-#       # Docker image here that supports Ansible
-#     steps:
-#       # Checkout code from git
-#       # Add ssh keys with fingerprint
-#       # attach workspace
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # Your code here
-#             exit 1
-#       - run:
-#           name: Configure server
-#           command: |
-#             # Your code here
-#             exit 1
-#       # Here's where you will add some code to rollback on failure
+  configure-infrastructure:
+    docker:
+      - image: python:3.8-alpine3.16
+    steps:
+      - checkout
+      # Add ssh keys with fingerprint
+      - add_ssh_keys:
+          fingerprints: [e0:cb:a6:a0:ba:0a:74:29:10:c5:df:ca:ae:57:45:30]
+      # attach workspace
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Check inventory.txt file
+          command: |
+            cat ~/project/.circleci/ansible/inventory.txt
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update tar gzip ansible aws-cli
+      - run:
+          name: Configure server
+          command: |
+            cd .circleci/ansible
+            ansible-playbook -i inventory.txt configure-server.yml
+      # Here's where you will add some code to rollback on failure
+      - destroy-environment:
+          workflow_id: '${CIRCLE_WORKFLOW_ID:0:7}'
 
 #   run-migrations:
 #     docker:
