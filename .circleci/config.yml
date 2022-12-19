@@ -217,6 +217,10 @@ jobs:
       - restore_cache:
           keys: [backend-build]
       - run:
+          name: Install dependencies
+          command: |
+            apk add --update aws-cli
+      - run:
           name: Run migrations
           command: |
             cd backend
