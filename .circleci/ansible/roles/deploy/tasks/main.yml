@@ -8,12 +8,12 @@
   become: true
   unarchive:
     src: '~/project/artifact.tar.gz'
-    dest: '~/ubuntu/web'
+    dest: '/home/ubuntu/web'
 - name: Start the web app
   become: true
   shell: |
-    cd ~/ubuntu/web
+    cd /home/ubuntu/web
     ls
     npm install
-    pm2 delete default
+    pm2 stop default
     pm2 start npm -- start
