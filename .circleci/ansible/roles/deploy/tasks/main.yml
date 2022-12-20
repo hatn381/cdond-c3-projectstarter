@@ -2,7 +2,7 @@
 - name: Creates directory
   become: true
   file:
-    path: ~/ubuntu/web
+    path: /home/ubuntu/web
     state: directory
 - name: Extract the artifact
   become: true
