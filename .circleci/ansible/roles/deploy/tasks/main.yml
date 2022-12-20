@@ -1,16 +1,16 @@
 ---
 - name: Creates directory
-  become: yes
+  become: true
   file:
     path: ~/ubuntu/web
     state: directory
 - name: Extract the artifact
-  become: yes
+  become: true
   unarchive:
     src: '~/project/artifact.tar.gz'
     dest: '~/ubuntu/web'
 - name: Start the web app
-  become: yes
+  become: true
   shell: |
     cd ~/ubuntu/web
     npm install

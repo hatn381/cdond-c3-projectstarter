@@ -283,7 +283,7 @@ jobs:
   deploy-backend:
     docker:
       # Docker image here that supports Ansible
-      - image: circleci/node:13.8.0
+      - image: python:3.8-alpine3.16
     steps:
       - checkout
       - add_ssh_keys:
@@ -296,12 +296,15 @@ jobs:
           command: |
             sudo apt update -y && sudo apt upgrade -y
             sudo apt -y install tar gzip unzip
+            # Install ansible
+            sudo apt install -y ansible
             # Install aws-cli
             sudo apt update -y && sudo apt upgrade -y
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
-            # Install ansible
-            sudo apt install -y ansible
+            sudo ./aws/install
+      - run:
+          name:
       - run:
           name: Deploy backend
           command: |
@@ -316,10 +319,10 @@ jobs:
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
       # Here's where you will add some code to rollback on failure
-      - revert-migrations:
-          workflow_id: '${CIRCLE_WORKFLOW_ID:0:7}'
-      - destroy-environment:
-          workflow_id: '${CIRCLE_WORKFLOW_ID:0:7}'
+      # - revert-migrations:
+      #     workflow_id: '${CIRCLE_WORKFLOW_ID:0:7}'
+      # - destroy-environment:
+      #     workflow_id: '${CIRCLE_WORKFLOW_ID:0:7}'
 
 #   smoke-test:
 #     docker:
