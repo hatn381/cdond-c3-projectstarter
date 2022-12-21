@@ -327,9 +327,7 @@ jobs:
       - run:
           name: Deploy backend
           command: |
-            pwd
             cd backend
-            touch .env
             echo ENVIRONMENT=production > ".env"
             echo TYPEORM_CONNECTION=postgres >> ".env"
             echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> ".env"
@@ -342,13 +340,9 @@ jobs:
             echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> ".env"
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> ".env"
 
-            pwd
-            ls -al
             npm install
             npm run build
             cd ..
-            pwd
-            ls -al
             # Zip the directory
             tar -C backend -czvf artifact.tar.gz .
             cd .circleci/ansible
