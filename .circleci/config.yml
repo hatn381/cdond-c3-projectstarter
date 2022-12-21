@@ -424,7 +424,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Get old stack workflow id
+          name: Delete old stack workflow
           command: |
             # Fetch the Old workflow ID
             export OldWorkflowID=$(aws cloudformation \
