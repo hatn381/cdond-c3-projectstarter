@@ -15,9 +15,13 @@
     cd /home/ubuntu/web
     pm2 stop default
   ignore_errors: yes
-- name: Start the web app
+- name: Npm install
   become: true
   shell: |
     cd /home/ubuntu/web
     npm install
+- name: Start the web app
+  become: true
+  shell: |
+    cd /home/ubuntu/web
     pm2 start npm -- start
