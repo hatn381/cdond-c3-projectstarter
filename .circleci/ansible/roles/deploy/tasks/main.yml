@@ -12,7 +12,7 @@
 - name: Stop app.
   become: true
   shell: |
-    cd /home/ubuntu/server
+    cd /home/ubuntu/web
     pm2 stop default
   ignore_errors: yes
 - name: Start the web app
@@ -20,5 +20,4 @@
   shell: |
     cd /home/ubuntu/web
     npm install
-    pm2 delete default
     pm2 start npm -- start
