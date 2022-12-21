@@ -9,11 +9,16 @@
   unarchive:
     src: '~/project/artifact.tar.gz'
     dest: '/home/ubuntu/web'
+- name: Stop app.
+  become: true
+  shell: |
+    cd /home/ubuntu/server
+    pm2 stop default
+  ignore_errors: yes
 - name: Start the web app
   become: true
   shell: |
     cd /home/ubuntu/web
     npm install
-    npm run build
-    pm2 stop default
+    pm2 delete default
     pm2 start npm -- start
