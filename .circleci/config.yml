@@ -167,6 +167,10 @@ jobs:
           command: |
             echo "[all]" > ~/project/.circleci/ansible/inventory.txt
       - run:
+          name: Check inventory.txt file
+          command: |
+            cat ~/project/.circleci/ansible/inventory.txt
+      - run:
           name: Add back-end ip to ansible inventory
           command: |
             aws ec2 describe-instances \
@@ -444,7 +448,7 @@ jobs:
           name: Delete old stack workflow
           command: |
             # Fetch the Old workflow ID
-            export OldWorkflowID=${(cat ~/project/OldWorkflowID.txt): -7}
+            export OldWorkflowID=${$(cat ~/project/OldWorkflowID.txt): -7}
             echo OldWorkflowID: "${OldWorkflowID}"
             echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
             export STACKS=($(aws cloudformation list-stacks \
@@ -454,7 +458,7 @@ jobs:
             echo Stack names: "${STACKS[@]}"
 
             # Remove old stacks and files
-            if [[ "udapeople-${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
+            if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
             then
               echo "---------------------Delete Confirmed-------------------------"
               aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
