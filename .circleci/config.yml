@@ -26,7 +26,7 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
+            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
             SUCCESS=$(curl --insecure https://kvdb.io/Aku6N98RcKcfGeckSY9zkZ/migration_<< parameters.workflow_id >>)
             if(( $SUCCESS==1 )); 
             then
@@ -410,10 +410,9 @@ jobs:
           name: Update cloudfront distribution
           command: |
             # Fetch the Old workflow ID
-            export OldStackName=$(aws cloudformation \
+            export OldWorkflowID=$(aws cloudformation \
                     list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
                     --no-paginate --output text)
-            export OldWorkflowID = ${OldStackName:-7}
             echo $OldWorkflowID >> ~/project/OldWorkflowID.txt
             cat ~/project/OldWorkflowID.txt
 
@@ -449,7 +448,8 @@ jobs:
           name: Delete old stack workflow
           command: |
             # Fetch the Old workflow ID
-            export OldWorkflowID=$(cat ~/project/OldWorkflowID.txt)
+            export OldStackName=$(cat ~/project/OldWorkflowID.txt)
+            export OldWorkflowID: "${OldStackName:-7}"
             echo OldWorkflowID: "${OldWorkflowID}"
             echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
             export STACKS=($(aws cloudformation list-stacks \
