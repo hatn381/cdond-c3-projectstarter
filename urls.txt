@@ -1,0 +1,5 @@
+URL1 : git repo
+https://github.com/hatn381/cdond-c3-projectstarter/blob/cicd/.circleci/config.yml
+
+URL2 : S3 bucket
+https://s3.console.aws.amazon.com/s3/buckets/udapeople-b5cabe4?region=us-east-1&tab=objects
